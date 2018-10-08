@@ -40,9 +40,12 @@ class StateUniversitySkill(MycroftSkill):
     def get_state_university(self, message):
         list_university = search_cocktail('oklahoma')
         if list_university:
-            self.speak_dialog("SateUniversity", {
+            self.speak_dialog(message.data['state'])
+            '''
+             self.speak_dialog("SateUniversity", {
                                   'state': 'oklahoma',
-                                  'university': list_university})
+                                  'university': list_university})           
+            '''
         else:
             self.speak_dialog('NotFound')
 
