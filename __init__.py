@@ -10,9 +10,24 @@
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
+import requests
 
-# Each skill is contained within its own class, which inherits base methods
-# from the MycroftSkill class.  You extend this class as shown below.
+
+API_URL = 'http://universities.hipolabs.com/'
+SEARCH = API_URL + 'search'
+
+def search_university(state_name):
+    parameters = {"name": state_name, "country": 'united states'}
+    r = requests.get(SEARCH, params=parameters)
+
+    if (200 <= r.status_code < 300):
+        data = r.json()
+        university_names = [li['name'] for li in data]
+        return university_names
+    else:
+        return None
+
+
 
 # TODO: Change "Template" to a unique name for your skill
 class StateUniversitySkill(MycroftSkill):
@@ -20,20 +35,20 @@ class StateUniversitySkill(MycroftSkill):
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
         super(StateUniversitySkill, self).__init__(name="StateUniversitySkill")
-        
-        # Initialize working variables used within the skill.
-        # self.count = 0
 
-    # The "handle_xxxx_intent" function is triggered by Mycroft when the
-    # skill's intent is matched.  The intent is defined by the IntentBuilder()
-    # pieces, and is triggered when the user's utterance matches the pattern
-    # defined by the keywords.  In this case, the match occurs when one word
-    # is found from each of the files:
-    #    vocab/en-us/Hello.voc
-    #    vocab/en-us/World.voc
-    # In this example that means it would match on utterances like:
-    #   'Hello world'
-    #   'Howdy you great big world'
+    @intent_file_handler('State.intent')
+    def get_state_university(self, message):
+        list_university = search_cocktail(message.data['state'])
+        if list_university:
+            self.speak_dialog("state.university", {
+                                  'state': message.data['state'],
+                                  'university': list_university})
+            self.speak_dialog('state', {
+                    'ingredients': ', '.join(ingredients(cocktail)[:-1]),
+                    'final_ingredient': ingredients(cocktail)[-1]})
+        else:
+            self.speak_dialog('NotFound')
+
     #   'Greetings planet earth'
     @intent_handler(IntentBuilder("").require("State").require("University"))
     def handle_hello_world_intent(self, message):
@@ -43,12 +58,6 @@ class StateUniversitySkill(MycroftSkill):
         self.speak_dialog("state.university")
 
 
-    # The "stop" method defines what Mycroft does when told to stop during
-    # the skill's execution. In this case, since the skill's functionality
-    # is extremely simple, there is no need to override it.  If you DO
-    # need to implement stop, you should return True to indicate you handled
-    # it.
-    #
     # def stop(self):
     #    return False
 
