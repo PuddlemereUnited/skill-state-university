@@ -38,12 +38,12 @@ class StateUniversitySkill(MycroftSkill):
 
     @intent_file_handler('State.intent')
     def get_state_university(self, message):
-        list_university = search_cocktail('oklahoma')
+        list_university = True#search_cocktail('oklahoma') # message.data['state']
         if list_university:
             self.speak_dialog(message.data['state'])
             '''
              self.speak_dialog("SateUniversity", {
-                                  'state': 'oklahoma',
+                                  'state': 'oklahoma',  # message.data['state']
                                   'university': list_university})           
             '''
         else:
