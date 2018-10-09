@@ -15,4 +15,4 @@ information that didn't fit in the one line.
 
 
 ## Credits 
-Your name# skill-state-university
+shejuti

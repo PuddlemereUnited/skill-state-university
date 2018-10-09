@@ -23,6 +23,7 @@ def search_university(state_name):
     if (200 <= r.status_code < 300):
         data = r.json()
         university_names = [li['name'] for li in data]
+        university_names = list(set(university_names))
         return university_names
     else:
         return None
@@ -38,12 +39,12 @@ class StateUniversitySkill(MycroftSkill):
 
     @intent_file_handler('State.intent')
     def get_state_university(self, message):
-        list_university = search_cocktail(message.data['state']) # message.data['state']
-        list_university = list(set(list_university))
+        list_university = search_cocktail(message.data['state'])
+
         if list_university:
             #self.speak_dialog(message.data['state'])
             self.speak_dialog("SateUniversity", {
-                                  'state': 'oklahoma',  # message.data['state']
+                                  'state': message.data['state'],
                                   'university': list_university})           
 
         else:
