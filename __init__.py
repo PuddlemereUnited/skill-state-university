@@ -8,7 +8,8 @@
 # when the skill gets installed later by a user.
 
 from adapt.intent import IntentBuilder
-from mycroft.skills.core import MycroftSkill, intent_handler
+#from mycroft.skills.core import MycroftSkill, intent_handler
+from mycroft import MycroftSkill, intent_file_handler, intent_handler, AdaptIntent
 from mycroft.util.log import LOG
 import requests
 
@@ -42,10 +43,7 @@ class StateUniversitySkill(MycroftSkill):
         list_university = search_cocktail('oklahoma') #message.data['state']
 
         if list_university:
-
-            self.speak_dialog("SateUniversity", {
-                                  'state': 'oklahoma',
-                                  'university': list_university})
+            self.speak_dialog("SateUniversity", {'state': 'oklahoma', 'university': list_university})
 
         else:
             self.speak_dialog('NotFound')
