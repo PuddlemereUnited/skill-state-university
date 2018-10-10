@@ -13,7 +13,6 @@ from mycroft import MycroftSkill, intent_file_handler, intent_handler, AdaptInte
 from mycroft.util.log import LOG
 import requests
 
-
 API_URL = 'http://universities.hipolabs.com/'
 SEARCH = API_URL + 'search'
 
@@ -40,12 +39,12 @@ class StateUniversitySkill(MycroftSkill):
 
     @intent_file_handler('State.intent')
     def get_state_university(self, message):
-        list_university = search_cocktail('oklahoma') #message.data['state']
+        list_university = search_university(message.data['state'])
         #list_university = True
 
         if list_university:
             #self.speak_dialog("SateUniversity", {'state': 'oklahoma', 'university': list_university})
-            self.speak_dialog("SateUniversity", {'state': message.data['state'], 'university': ['OU', 'OSU']})
+            self.speak_dialog("SateUniversity", {'state': message.data['state'], 'university': list_university})
 
         else:
             self.speak_dialog('NotFound')
