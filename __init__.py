@@ -36,21 +36,22 @@ class StateUniversitySkill(MycroftSkill):
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
         super(StateUniversitySkill, self).__init__(name="StateUniversitySkill")
-
+'''
     @intent_file_handler('State.intent')
     def get_state_university(self, message):
         list_university = search_cocktail(message.data['state'])
 
         if list_university:
-            self.speak_dialog(message.data['state'])
-            '''
+            #self.speak_dialog(message.data['state'])
+            
             self.speak_dialog("SateUniversity", {
                                   'state': message.data['state'],
-                                  'university': list_university})          
-            '''
+                                  'university': list_university})
+            
 
         else:
             self.speak_dialog('NotFound')
+'''
 
     #   'Greetings planet earth'
     @intent_handler(IntentBuilder("").require("State").require("University"))
