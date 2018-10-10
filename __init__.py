@@ -42,10 +42,12 @@ class StateUniversitySkill(MycroftSkill):
         list_university = search_cocktail(message.data['state'])
 
         if list_university:
-            #self.speak_dialog(message.data['state'])
+            self.speak_dialog(message.data['state'])
+            '''
             self.speak_dialog("SateUniversity", {
                                   'state': message.data['state'],
-                                  'university': list_university})           
+                                  'university': list_university})          
+            '''
 
         else:
             self.speak_dialog('NotFound')
