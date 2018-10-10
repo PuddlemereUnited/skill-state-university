@@ -45,7 +45,7 @@ class StateUniversitySkill(MycroftSkill):
 
         if list_university:
             #self.speak_dialog("SateUniversity", {'state': 'oklahoma', 'university': list_university})
-            self.speak_dialog("SateUniversity", {'state': message.data['state'], 'university': 'OU'})
+            self.speak_dialog("SateUniversity", {'state': message.data['state'], 'university': ['OU', 'OSU']})
 
         else:
             self.speak_dialog('NotFound')
