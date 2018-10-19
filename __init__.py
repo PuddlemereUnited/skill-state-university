@@ -19,8 +19,9 @@ def search_manual(situation):
     with open('troubleshoot.json') as f:
         data = json.load(f)
 
-    situation_names = [li['name'] == situation for li in data]
-    return situation_names
+    commonCauses = [li for li in data if li['name'] == situation] 
+    commonCauses = commonCauses[0]['cause']
+    return commonCauses
 
 
 
@@ -65,13 +66,3 @@ class UserManualSkill(MycroftSkill):
 # Note that it's outside the class itself.
 def create_skill():
     return UserManualSkill()
-
-
-
-import json
-situation = "Temperature"
-with open('troubleshoot.json') as f:
-    data = json.load(f)
-
-situation_names = [li['name'] == situation for li in data]
-return situation_names
