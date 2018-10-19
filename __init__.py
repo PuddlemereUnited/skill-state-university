@@ -12,16 +12,11 @@ from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_file_handler, intent_handler, AdaptIntent
 from mycroft.util.log import LOG
 import json
+import os
+from mycroft.filesystem import FileSystemAccess
 
-LOGGER = getLogger(__name__)
+#LOGGER = getLogger(__name__)
 
-def search_manual(situation):
-    with open('troubleshoot.json') as f:
-        data = json.load(f)
-
-    commonCauses = [li for li in data if li['name'] == situation] 
-    commonCauses = commonCauses[0]['cause']
-    return commonCauses
 
 
 
@@ -31,9 +26,18 @@ class UserManualSkill(MycroftSkill):
     def __init__(self):
         super(UserManualSkill, self).__init__(name="UserManualSkill")
 
+    def search_manual(self, situation):
+        file_system = FileSystemAccess(str(self.skill_id))
+        file = file_system.open('troubleshooting.json','r')
+        data = json.load(file)
+
+        commonCauses = [li for li in data if li['name'] == situation] 
+        commonCauses = commonCauses[0]['cause']
+        return commonCauses
+
     @intent_file_handler('troubleshoot.intent')
     def get_state_university(self, message):
-        list_CommonCauses = search_manual(message.data['situation'])
+        list_CommonCauses = self.search_manual(message.data['situation'])
         #list_university = True
 
         if list_CommonCauses:
@@ -48,15 +52,15 @@ class UserManualSkill(MycroftSkill):
     def handle_compressor_rotation(self, message):
         # Mycroft will randomly speak one of the lines from the file
         #    dialogs/en-us/hello.world.dialog  
-        list_CommonCauses = search_manual("Compressor")
-        self.speak_dialog("TroubleShoot", {'situation': 'Compressor will not rotate', 'commonCuase': list_CommonCauses})
+        list_CommonCauses = self.search_manual("compressor")
+        self.speak_dialog("TroubleShoot", {'situation': 'Compressor will not rotate', 'commonCause': list_CommonCauses})
 
     @intent_handler(IntentBuilder("").require("temperature"))
     def handle_compressor_temperature(self, message):
         # Mycroft will randomly speak one of the lines from the file
         #    dialogs/en-us/hello.world.dialog  
-        list_CommonCauses = search_manual("Temperature")
-        self.speak_dialog("TroubleShoot", {'situation': 'Temperature', 'commonCuase': list_CommonCauses})
+        list_CommonCauses = self.search_manual("temperature")
+        self.speak_dialog("TroubleShoot", {'situation': 'Temperature', 'commonCause': list_CommonCauses})
 
 
     # def stop(self):
