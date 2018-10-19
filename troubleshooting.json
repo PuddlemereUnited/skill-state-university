@@ -1,6 +1,6 @@
 [
     {
-        "name": "Compressor",
+        "name": "compressor",
         "cause": [
             "Cylinders gas pressure loaded",
             "Piston end clearance improper, piston hitting head-end head or crank-end head",
@@ -9,8 +9,8 @@
         ]
     },
     {
-        "name": "Temperature",
-        "ports": [
+        "name": "temperature",
+        "cause": [
             "Temperature control valve temperature incorrect",
             "Improperly installed or stuck"
         ]
