@@ -11,50 +11,49 @@ from adapt.intent import IntentBuilder
 #from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft import MycroftSkill, intent_file_handler, intent_handler, AdaptIntent
 from mycroft.util.log import LOG
-import requests
+import json
 
-API_URL = 'http://universities.hipolabs.com/'
-SEARCH = API_URL + 'search'
+def search_manual(situation):
+    with open('troubleshoot.json') as f:
+        data = json.load(f)
 
-def search_university(state_name):
-    parameters = {"name": state_name, "country": 'united states'}
-    r = requests.get(SEARCH, params=parameters)
-
-    if (200 <= r.status_code < 300):
-        data = r.json()
-        university_names = [li['name'] for li in data]
-        university_names = list(set(university_names))
-        return university_names
-    else:
-        return None
+    situation_names = [li['name'] == situation for li in data]
+    return situation_names
 
 
 
-# TODO: Change "Template" to a unique name for your skill
-class StateUniversitySkill(MycroftSkill):
+class UserManualSkill(MycroftSkill):
 
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
-        super(StateUniversitySkill, self).__init__(name="StateUniversitySkill")
+        super(UserManualSkill, self).__init__(name="UserManualSkill")
 
-    @intent_file_handler('State.intent')
+    @intent_file_handler('troubleshoot.intent')
     def get_state_university(self, message):
-        list_university = search_university(message.data['state'])
+        list_CommonCauses = search_manual(message.data['situation'])
         #list_university = True
 
-        if list_university:
+        if list_CommonCauses:
             #self.speak_dialog("SateUniversity", {'state': 'oklahoma', 'university': list_university})
-            self.speak_dialog("SateUniversity", {'state': message.data['state'], 'university': list_university})
+            self.speak_dialog("TroubleShoot", {'situation': message.data['situation'], 'commonCause': list_CommonCauses})
 
         else:
             self.speak_dialog('NotFound')
 
     #   'Greetings planet earth'
-    @intent_handler(IntentBuilder("").require("State").require("University"))
-    def handle_state_university_intent(self, message):
+    @intent_handler(IntentBuilder("").require("CompressorRotation"))
+    def handle_compressor_rotation(self, message):
         # Mycroft will randomly speak one of the lines from the file
-        #    dialogs/en-us/hello.world.dialog
-        self.speak_dialog("state.university")
+        #    dialogs/en-us/hello.world.dialog  
+        list_CommonCauses = search_manual("Compressor")
+        self.speak_dialog("TroubleShoot", {'situation': 'Compressor will not rotate', 'commonCuase': list_CommonCauses})
+
+    @intent_handler(IntentBuilder("").require("temperature"))
+    def handle_compressor_temperature(self, message):
+        # Mycroft will randomly speak one of the lines from the file
+        #    dialogs/en-us/hello.world.dialog  
+        list_CommonCauses = search_manual("Temperature")
+        self.speak_dialog("TroubleShoot", {'situation': 'Temperature', 'commonCuase': list_CommonCauses})
 
 
     # def stop(self):
@@ -63,4 +62,14 @@ class StateUniversitySkill(MycroftSkill):
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
 def create_skill():
-    return StateUniversitySkill()
+    return UserManualSkill()
+
+
+
+import json
+situation = "Temperature"
+with open('troubleshoot.json') as f:
+    data = json.load(f)
+
+situation_names = [li['name'] == situation for li in data]
+return situation_names

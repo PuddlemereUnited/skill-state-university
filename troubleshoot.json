@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Compressor",
+        "cause": [
+            "Cylinders gas pressure loaded",
+            "Piston end clearance improper, piston hitting head-end head or crank-end head",
+            "Foreign, incompressible material in cylinder",
+            "Mechanical seizure in running gear (crankshaft, bearings, connecting rod, crosshead, packing/piston rod, piston)"
+        ]
+    },
+    {
+        "name": "Temperature",
+        "ports": [
+            "Temperature control valve temperature incorrect",
+            "Improperly installed or stuck"
+        ]
+    }
+]
