@@ -13,6 +13,8 @@ from mycroft import MycroftSkill, intent_file_handler, intent_handler, AdaptInte
 from mycroft.util.log import LOG
 import json
 
+LOGGER = getLogger(__name__)
+
 def search_manual(situation):
     with open('troubleshoot.json') as f:
         data = json.load(f)
